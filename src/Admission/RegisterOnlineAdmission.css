@@ -1,0 +1,102 @@
+  
+            .hero-section {
+                padding: 50px 0;
+                background-color: #f8f9fa;
+            }       
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }   
+            .step-title {
+                font-size: 1.5rem;
+                font-weight: bold;
+                margin-top: 20px;
+            }
+            .step-image {
+                max-width: 100%;
+                height: auto;
+                margin-top: 20px;
+                border-radius: 8px;
+            }
+            .highlight {
+                color: #007bff;
+                font-weight: bold;
+            }
+            .note {
+                background-color: #e9ecef;
+                padding: 20px;
+                border-radius: 8px;
+                margin-top: 20px;
+            }
+            .list-group-item {
+                background-color: #ffffff;
+                border: 1px solid #dee2e6;
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
+            .list-group-item em {
+                font-style: italic;
+                color:rgb(0, 0, 0);
+            }
+            .list-group-item ul {
+                margin-top: 10px;
+            }
+            .list-group-item ul li {
+                margin-bottom: 5px;
+            }
+            .list-group-item ul li ul {
+                margin-top: 5px;
+            }
+            .list-group-item ul li ul li {
+                margin-bottom: 0;
+            }
+            .text-center {
+                text-align: center;
+            }
+            .text-center h2 {
+                margin-top: 30px;
+                font-size: 2rem;
+                color:rgb(0, 0, 0);
+            }
+            .text-center p {
+                font-size: 1.1rem;
+                color:rgb(255, 255, 255);
+            }
+            .text-center .highlight {
+                color: #dc3545;
+                font-weight: bold;
+            }
+            .note p {
+                font-size: 1rem;
+                color: #495057;
+            }
+            .note p strong {
+                color:rgb(255, 255, 255);
+            }
+            .note p b {
+                color: #dc3545;
+            }
+            .note p span {
+                color: #007bff;
+            }
+            @media (max-width: 768px) {
+                .step-title {
+                    font-size: 1.25rem;
+                }
+                .step-image {
+                    max-width: 90%;
+                }
+            }
+            @media (max-width: 576px) {
+                .container {
+                    padding: 10px;
+                }
+                .step-title {
+                    font-size: 1.1rem;
+                }
+                .step-image {
+                    max-width: 100%;
+                }
+            }
+       
