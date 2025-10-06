@@ -11,3 +11,114 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* in your CSS */
+.dropdown-menu {
+  background-color: #000; /* dark bg */
+  color: #fff;
+}
+.dropdown-menu .dropdown-item {
+  color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+    .hero-section {
+      background: linear-gradient(rgba(0, 45, 114, 0.8), rgba(0, 45, 114, 0.8)), url('../src/Dashboard/Img/Universitylogo.png') center center/cover no-repeat;
+      color: white;
+      padding: 100px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero-section .container {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-section h1 {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    .hero-section h1 span {
+      color: #ffc107;
+    }
+
+    .hero-section p {
+      max-width: 700px;
+      margin: 20px auto;
+      font-size: 1.1rem;
+    }
+
+    .hero-section .btn-tour {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+      padding: 10px 25px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+
+    .student-image {
+      position: absolute;
+      left: 10%;
+      bottom: -80px;
+      max-height: 400px;
+      z-index: 3;
+    }
+
+    .info-boxes {
+      margin-top: 100px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .info-box {
+      flex: 1;
+      min-width: 200px;
+      max-width: 300px;
+      padding: 30px 20px;
+      text-align: center;
+      color: black;
+    }
+
+    .info-box h5 {
+      font-weight: bold;
+    }
+
+    .student-events { background-color: #f6f093; }
+    .classroom-stories { background-color: #fbd1a2; }
+    .teachers-profile { background-color: #bce1e7; }
+
+    @media (max-width: 768px) {
+      .student-image {
+        position: static;
+        margin: 20px auto;
+        display: block;
+      }
+
+      .hero-section {
+        text-align: center;
+      }
+
+      .info-boxes {
+        margin-top: 50px;
+      }
+    }

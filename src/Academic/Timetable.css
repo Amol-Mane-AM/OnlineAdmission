@@ -1,0 +1,61 @@
+.timetable-container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.timetable-grid {
+  display: grid;
+  grid-template-columns: 100px repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.header-cell,
+.time-cell,
+.subject-cell {
+  padding: 12px;
+  text-align: center;
+  border-radius: 6px;
+  font-weight: bold;
+  color: white;
+}
+
+.header-cell {
+  background-color: #343a40;
+}
+
+.time-cell {
+  background-color: #6c757d;
+}
+
+.subject-cell.mathematics {
+  background-color: #28a745;
+}
+
+.subject-cell.english {
+  background-color: #6f42c1;
+}
+
+.subject-cell.psychology {
+  background-color: #0056b3;
+}
+
+.subject-cell.design {
+  background-color: #fd7e14;
+}
+
+.subject-cell.biology {
+  background-color: #e83e8c;
+}
+
+/* Lunch Break Styling */
+.lunch-break {
+  grid-column: span 5;
+  background-color: #ffc107;
+  color: #212529;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
