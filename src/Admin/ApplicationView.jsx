@@ -78,7 +78,7 @@ function ApplicationView() {
             </td>
           </tr>
           <tr><th>Payment Status</th><td>{application.paymentStatus}</td></tr>
-          <tr><th>Amount</th><td>₹{application.amount}</td></tr>
+          <tr><th>Amount</th> <td>₹{(application.amount / 100).toFixed(2)}</td></tr>
           <tr>
             <th>Receipt</th>
             <td>

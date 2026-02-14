@@ -7,29 +7,58 @@ function ContactUs() {
 
   const formRef = useRef();
 
-  const sendEmail = (e) => {
-    debugger;
+  // const sendEmail = (e) => {
+  //   debugger;
+  //   e.preventDefault();
+
+  //   emailjs
+  //     .sendForm(
+  //       "service_aiq4xma",     // replace from EmailJS dashboard
+  //       "template_ec1qmai",    // replace from EmailJS template
+  //       formRef.current,
+  //       "_RoIYQ12FQ7s7QD9P"      // replace from EmailJS account
+  //     )
+  //     .then(
+  //       (result) => {
+  //         console.log(result.text);
+  //         swal("Message Sent", "Thank you for contacting us!", "success");
+  //         formRef.current.reset();
+  //       },
+  //       (error) => {
+  //         console.log(error.text);
+  //         swal("Failed", "Something went wrong. Try again.", "error");
+  //       }
+  //     );
+  //   }
+   const sendEmail = (e) => {
     e.preventDefault();
 
+    const templateParams = {
+      user_name: formRef.current.user_name.value,
+      user_email: formRef.current.user_email.value,
+      message: formRef.current.message.value,
+      to_email: "punestudenteducationschool@gmail.com", // 👈 send to this email
+    };
+
     emailjs
-      .sendForm(
-        "service_aiq4xma",     // replace from EmailJS dashboard
-        "template_ec1qmai",    // replace from EmailJS template
-        formRef.current,
-        "_RoIYQ12FQ7s7QD9P"      // replace from EmailJS account
+      .send(
+        "service_aiq4xma",      // your service ID
+        "template_ec1qmai",     // your template ID
+        templateParams,
+        "_RoIYQ12FQ7s7QD9P"     // your public key
       )
       .then(
         (result) => {
-          console.log(result.text);
+          console.log("Email sent:", result.text);
           swal("Message Sent", "Thank you for contacting us!", "success");
           formRef.current.reset();
         },
         (error) => {
-          console.log(error.text);
+          console.error("Email send failed:", error);
           swal("Failed", "Something went wrong. Try again.", "error");
         }
       );
-    }
+  };
     
     return (
         

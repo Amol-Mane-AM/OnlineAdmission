@@ -1,184 +1,302 @@
-import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "./ThemeContext";
-import dark from '../icons/contrast_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg';
-import light from '../icons/dark_mode_24dp_1F1F1F_FILL0_wght400_GRAD0_opsz24.svg';
+import { Outlet, NavLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import React from 'react';
-import schoollogo from '../Dashboard/Img/Universitylogo.png';
-import LoginPopup from "./LoginPopup";
+import schoollogo from './Img/Universitylogo.png';
+import LoginPopup from './LoginPopup';
+import './Nav.css';
 
 function Nav() {
-  const { theme, setTheme } = useContext(ThemeContext);
-  const isLight = theme === 'light';
-  const navigate = useNavigate();
+
 
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Get session values
   useEffect(() => {
-    setEmail(sessionStorage.getItem("email"));
-    setName(sessionStorage.getItem("name")); // Make sure you're saving "name" in sessionStorage during login
+    setEmail(sessionStorage.getItem('email'));
+    setName(sessionStorage.getItem('name'));
   }, []);
 
   // Logout function
   const handleLogout = () => {
     sessionStorage.clear();
-    localStorage.removeItem("token");
-    // navigate("/registration", { replace: true }); // or just window.location.reload()
-    window.location.href = "/registration";
-
+    localStorage.removeItem('token');
+    window.location.href = '/registration';
   };
-
-  const themeStyle = {
-    backgroundColor: isLight ? "#ffffffff" : "#ffffff",
-    color: isLight ? "#ffffff" : "#ffffffff",
-    padding: "10px 20px",
-    transition: "all 0.3s ease"
-  };
-
-  const linkStyle = {
-    color: isLight ? "#ffffff" : "#ffffffff",
-    fontWeight: "500",
-    margin: "0 8px"
-  };
-
-  const dropdownItemStyle = {
-    color: "#000000"
-  };
-
 
   return (
     <>
-      <header>
-        <nav className="navbar navbar-expand-lg shadow bg-black">
-          <div className="container-fluid">
-
-            {/* Logo */}
-            <NavLink className="navbar-brand" to="/Dashboard">
-              <img
-                src={schoollogo}
-                alt="School Logo"
-                style={{ width: '50px', height: '50px', borderRadius: '8px' }}
-              />
+      <header className={`main-header ${scrolled ? 'scrolled' : ''}`}>
+        <nav className="navbar navbar-expand-lg">
+          <div className="container-fluid px-3">
+            {/* Logo Section */}
+            <NavLink className="navbar-brand brand-wrapper" to="/Dashboard">
+              <div className="logo-container">
+                <img
+                  src={schoollogo}
+                  alt="School Logo"
+                  className="school-logo"
+                />
+              </div>
+              <div className="brand-text">
+                <h4 className="school-name">The Pune School</h4>
+                <span className="school-tagline">Excellence in Education</span>
+              </div>
             </NavLink>
-            <h4 className="m-0 text-white">The Pune School</h4>
 
-
-            {/* Toggler */}
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+            {/* Mobile Toggle */}
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#mainNavbar"
+            >
               <span className="navbar-toggler-icon"></span>
             </button>
 
-            <div className="collapse navbar-collapse justify-content-end" id="mainNavbar">
-             <ul className="navbar-nav align-items-center">
-  {/* DASHBOARD Dropdown */}
-  {sessionStorage.name && sessionStorage.name.trim() !== "" && (
-    <li className="nav-item dropdown text-white">
-      <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={linkStyle}>
-        DASHBOARD
-      </a>
-      <ul className="dropdown-menu">
-        {sessionStorage.name === "admin" ? (
-          <li>
-            <NavLink className="dropdown-item" to="/adminDash" style={dropdownItemStyle}>
-              Admin Dashboard
-            </NavLink>
-             <NavLink className="dropdown-item" to="/fulladminDash" style={dropdownItemStyle}>
-               Dashboard
-            </NavLink>
-            <NavLink className="dropdown-item" to="/viewUsers" style={dropdownItemStyle}>
-               ViewUsers
-            </NavLink>
-            <NavLink className="dropdown-item" to="/chart" style={dropdownItemStyle}>
-               Chart
-            </NavLink>
-          </li>
-          
-        ) : (
-          <li>
-            <NavLink className="dropdown-item" to="/AdmissionFormDashboard" style={dropdownItemStyle}>
-              Admission Form Dashboard
-            </NavLink>
-          </li>
-        )}
-      </ul>
-    </li>
-  )}
+            <div className="collapse navbar-collapse" id="mainNavbar">
+              {/* Navigation Menu */}
+              <ul className="navbar-nav mx-auto main-nav">
+                {/* DASHBOARD Dropdown */}
+                {sessionStorage.name && sessionStorage.name.trim() !== '' && (
+                  <li className="nav-item dropdown">
+                    <button
+                      className="nav-link dropdown-toggle bg-transparent border-0 w-100 text-start"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <span className="nav-icon">📊</span>
+                      DASHBOARD
+                    </button>
+                    <ul className="dropdown-menu custom-dropdown">
+                      {sessionStorage.name === 'admin' ? (
+                        <>
+                          <li>
+                            <NavLink className="dropdown-item" to="/adminDash">
+                              <span className="dropdown-icon">🎯</span>
+                              Admin Dashboard
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink className="dropdown-item" to="/fulladminDash">
+                              <span className="dropdown-icon">📈</span>
+                              Full Dashboard
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink className="dropdown-item" to="/viewUsers">
+                              <span className="dropdown-icon">👥</span>
+                              View Users
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink className="dropdown-item" to="/chart">
+                              <span className="dropdown-icon">📊</span>
+                              Charts
+                            </NavLink>
+                          </li>
+                        </>
+                      ) : (
+                        <li>
+                          <NavLink className="dropdown-item" to="/AdmissionFormDashboard">
+                            <span className="dropdown-icon">📝</span>
+                            Admission Form Dashboard
+                          </NavLink>
+                        </li>
+                      )}
+                    </ul>
+                  </li>
+                )}
 
-  {/* SCHOOL Dropdown */}
-  <li className="nav-item dropdown text-white">
-    <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={linkStyle}>
-      SCHOOL
-    </a>
-    <ul className="dropdown-menu">
-      <li><NavLink className="dropdown-item" to="/governingbody" style={dropdownItemStyle}>Governing Body</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/leadershipteam" style={dropdownItemStyle}>Leadership Team</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/contactus" style={dropdownItemStyle}>Contact Us</NavLink></li>
-    </ul>
-  </li>
+                {/* SCHOOL Dropdown */}
+                <li className="nav-item dropdown">
+                  <button
+                    className="nav-link dropdown-toggle bg-transparent border-0 w-100 text-start"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <span className="nav-icon">🏫</span>
+                    SCHOOL
+                  </button>
+                  <ul className="dropdown-menu custom-dropdown">
+                    <li>
+                      <NavLink className="dropdown-item" to="/governingbody">
+                        <span className="dropdown-icon">👔</span>
+                        Governing Body
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/leadershipteam">
+                        <span className="dropdown-icon">🎖️</span>
+                        Leadership Team
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/contactus">
+                        <span className="dropdown-icon">📞</span>
+                        Contact Us
+                      </NavLink>
+                    </li>
+                  </ul>
+                </li>
 
-  {/* ABOUT Dropdown */}
-  <li className="nav-item dropdown text-white">
-    <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={linkStyle}>
-      ABOUT
-    </a>
-    <ul className="dropdown-menu">
-      <li><NavLink className="dropdown-item" to="/history" style={dropdownItemStyle}>History</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/directorsmessage" style={dropdownItemStyle}>Directors’ Message</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/principaldesk" style={dropdownItemStyle}>Principal Desk</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/visionmission" style={dropdownItemStyle}>Vision & Mission</NavLink></li>
-    </ul>
-  </li>
+                {/* ABOUT Dropdown */}
+                <li className="nav-item dropdown">
+                  <button
+                    className="nav-link dropdown-toggle bg-transparent border-0 w-100 text-start"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <span className="nav-icon">ℹ️</span>
+                    ABOUT
+                  </button>
+                  <ul className="dropdown-menu custom-dropdown">
+                    <li>
+                      <NavLink className="dropdown-item" to="/history">
+                        <span className="dropdown-icon">📜</span>
+                        History
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/directorsmessage">
+                        <span className="dropdown-icon">💬</span>
+                        Directors' Message
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/principaldesk">
+                        <span className="dropdown-icon">🎓</span>
+                        Principal Desk
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/visionmission">
+                        <span className="dropdown-icon">🎯</span>
+                        Vision & Mission
+                      </NavLink>
+                    </li>
+                  </ul>
+                </li>
 
-  {/* ADMISSION Dropdown */}
-  <li className="nav-item dropdown text-white">
-    <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={linkStyle}>
-      ADMISSION
-    </a>
-    <ul className="dropdown-menu">
-      <li><NavLink className="dropdown-item" to="/schoolfees" style={dropdownItemStyle}>School Fees</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/registeronlineadmission" style={dropdownItemStyle}>Register Online</NavLink></li>
-    </ul>
-  </li>
+                {/* ADMISSION Dropdown */}
+                <li className="nav-item dropdown">
+                  <button
+                    className="nav-link dropdown-toggle bg-transparent border-0 w-100 text-start"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <span className="nav-icon">📋</span>
+                    ADMISSION
+                  </button>
+                  <ul className="dropdown-menu custom-dropdown">
+                    <li>
+                      <NavLink className="dropdown-item" to="/schoolfees">
+                        <span className="dropdown-icon">💰</span>
+                        School Fees
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/registeronlineadmission">
+                        <span className="dropdown-icon">✍️</span>
+                        Register Online
+                      </NavLink>
+                    </li>
+                  </ul>
+                </li>
 
-  {/* EVENT Dropdown */}
-  <li className="nav-item dropdown text-white">
-    <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={linkStyle}>
-      EVENT
-    </a>
-    <ul className="dropdown-menu">
-      <li><NavLink className="dropdown-item" to="/gallery" style={dropdownItemStyle}>Gallery</NavLink></li>
-    </ul>
-  </li>
+                {/* EVENT Dropdown */}
+                <li className="nav-item dropdown">
+                  <button
+                    className="nav-link dropdown-toggle bg-transparent border-0 w-100 text-start"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <span className="nav-icon">🎉</span>
+                    EVENT
+                  </button>
+                  <ul className="dropdown-menu custom-dropdown">
+                    <li>
+                      <NavLink className="dropdown-item" to="/gallery">
+                        <span className="dropdown-icon">🖼️</span>
+                        Gallery
+                      </NavLink>
+                    </li>
+                  </ul>
+                </li>
 
-  {/* ACADEMIC Dropdown */}
-  <li className="nav-item dropdown text-white">
-    <a className="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" style={linkStyle}>
-      ACADEMIC
-    </a>
-    <ul className="dropdown-menu">
-      <li><NavLink className="dropdown-item" to="/academic" style={dropdownItemStyle}>Academic</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/coCurricular" style={dropdownItemStyle}>Co-Curricular</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/timetable" style={dropdownItemStyle}>Timetable</NavLink></li>
-      <li><NavLink className="dropdown-item" to="/news" style={dropdownItemStyle}>News</NavLink></li>
-    </ul>
-  </li>
-</ul>
+                {/* ACADEMIC Dropdown */}
+                <li className="nav-item dropdown">
+                  <button
+                    className="nav-link dropdown-toggle bg-transparent border-0 w-100 text-start"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <span className="nav-icon">📚</span>
+                    ACADEMIC
+                  </button>
+                  <ul className="dropdown-menu custom-dropdown">
+                    <li>
+                      <NavLink className="dropdown-item" to="/academic">
+                        <span className="dropdown-icon">📖</span>
+                        Academic
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/coCurricular">
+                        <span className="dropdown-icon">🎨</span>
+                        Co-Curricular
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/timetable">
+                        <span className="dropdown-icon">🕐</span>
+                        Timetable
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink className="dropdown-item" to="/news">
+                        <span className="dropdown-icon">📰</span>
+                        News
+                      </NavLink>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
 
-
-              {/* Right section: Auth */}
-              <div className="d-flex align-items-center ms-3 text-white">
+              {/* Auth Section */}
+              <div className="auth-section">
                 {email ? (
-                  <>
-                    <div className="me-3 text-end">
-                      <div style={{ fontSize: "0.9rem" }}>{name || "User"}</div>
-                      <div style={{ fontSize: "0.8rem", opacity: 0.8 }}>{email}</div>
+                  <div className="user-profile-wrapper">
+                    <div className="user-info">
+                      <div className="user-avatar">
+                        {name ? name.charAt(0).toUpperCase() : 'U'}
+                      </div>
+                      <div className="user-details">
+                        <div className="user-name">{name || 'User'}</div>
+                        <div className="user-email">{email}</div>
+                      </div>
                     </div>
-                    <button className="btn btn-outline-light btn-sm" onClick={handleLogout}>
+                    <button className="btn-logout" onClick={handleLogout}>
+                      <span className="logout-icon">🚪</span>
                       Logout
                     </button>
-                  </>
+                  </div>
                 ) : (
                   <LoginPopup />
                 )}
@@ -187,28 +305,25 @@ function Nav() {
           </div>
         </nav>
 
-        {name?.toLowerCase() !== "admin" && (
-          <a href="/registration" className="text-decoration-none text-dark">
-            <div className="marquee-container bg-warning text-dark py-2">
-              <marquee>
-                <div className="scroll-text fw-bold text-uppercase">
-                  🎓 Admissions Open – Limited Seats! 🚀
-                </div>
-              </marquee>
-            </div>
-          </a>
+        {/* Admission Banner */}
+        {name?.toLowerCase() !== 'admin' && (
+          <div className="admission-banner">
+            <a href="/registration" className="banner-link">
+              <div className="banner-content">
+                <span className="banner-icon">🎓</span>
+                <span className="banner-text">Admissions Open – Limited Seats!</span>
+                <span className="banner-icon">🚀</span>
+              </div>
+            </a>
+          </div>
         )}
-
-
       </header>
 
-      <main>
+      <main className="main-content">
         <Outlet />
       </main>
     </>
   );
-
-
 }
 
 export default Nav;

@@ -18,7 +18,7 @@ function LoginPopup() {
   return (
     <>
       {/* Login Button */}
-      <div className="d-flex align-items-center ms-3">
+      <div className="d-flex align-items-center">
         <Button className="btn btn-outline-light" onClick={() => setShow(true)}>
           Login
         </Button>

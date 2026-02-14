@@ -12,16 +12,16 @@ import img7 from '../Gallery/GalleryImg/img7.jpeg';
 import img8 from '../Gallery/GalleryImg/img8.jpg';
 import img9 from '../Gallery/GalleryImg/img9.jpeg';
 import img10 from '../Gallery/GalleryImg/img10.jpeg';
-import img11 from '../Gallery/GalleryImg/img11.jpg';
 
 
-const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9 ,img10];
+
+const images = [img1, img2, img3, img4, img5, img6, img7, img8, img9, img10];
 
 function SchoolGallery() {
   return (
     <div className="container gallery-page hero-section position-relative">
       <div className="gallery-header">
-        <img src={schoollogo} alt="Logo" className="school-logo" style={{width:200,height:180,marginLeft:50,marginTop:0}}/>
+        <img src={schoollogo} alt="Logo" className="school-logo" style={{ width: 200, height: 180, marginLeft: 50, marginTop: 0 }} />
         <h1>Gallery</h1>
         <p>Inspiring the Moments</p>
       </div>
