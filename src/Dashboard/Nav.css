@@ -44,8 +44,8 @@
 
 .logo-container {
   position: relative;
-  width: 55px;
-  height: 55px;
+  width: 100px;
+  height: 90px;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
