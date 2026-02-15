@@ -4,13 +4,12 @@ import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 
 
-import { jwtDecode } from "jwt-decode";
-import { GoogleLogin } from "@react-oauth/google";
+
 
 function LoginForm() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState();
-  const navigate = useNavigate();
+
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetStep, setResetStep] = useState("EMAIL"); // "EMAIL" → "OTP"
   const [email, setEmail] = useState("");
@@ -34,7 +33,7 @@ function LoginForm() {
       setLoading(true);
 
       const res = await axios.post("http://localhost:8080/user/login", form);
-      console.log("res",res);
+      console.log("res", res);
       swal("Success!", res.data.message || "Login.", "success");
 
       // ✅ Show success alert
@@ -46,14 +45,14 @@ function LoginForm() {
       sessionStorage.setItem("email", res.data.email);
 
       window.location.href = "/AdmissionFormDashboard";
-      console.log("sessionstorage",sessionStorage);
+      console.log("sessionstorage", sessionStorage);
 
 
     } catch (err) {
       // ✅ Show error only if login fails
-      console.log("err",err);
+      console.log("err", err);
 
-      swal("Error",  err.response.data.message, "error");
+      swal("Error", err.response.data.message, "error");
     } finally {
       setLoading(false);
     }
@@ -119,18 +118,7 @@ function LoginForm() {
   /* ---------------- Google Identity initialisation ---------------- */
 
   //  Create the handler function
-  const handleGoogleLogin = (credentialResponse) => {
-    debugger;
-    try {
-      const decoded = jwtDecode(credentialResponse.credential);
-      setEmail(decoded.email);
-      console.log("Decoded:", decoded);
 
-
-    } catch (error) {
-      console.error("JWT Decode failed", error);
-    }
-  };
 
 
   return (
@@ -179,7 +167,7 @@ function LoginForm() {
             {loading ? "Logging in..." : "Login"}
           </button>
 
-           
+
 
         </form>
 
@@ -188,7 +176,7 @@ function LoginForm() {
         {/* popup */}
         {showResetModal && (
           <div className="modal show fade d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.6)', position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', zIndex: 1050 }}
- >
+          >
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+
 import swal from 'sweetalert';
 import Swal from 'sweetalert2';
 
@@ -8,8 +8,7 @@ import { Eye, EyeOff } from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 
-import { jwtDecode } from "jwt-decode";
-import { GoogleLogin } from "@react-oauth/google";
+
 
 function SignupForm() {
     /* ──────────────────────────────── state ──────────────────────────────── */
@@ -22,9 +21,9 @@ function SignupForm() {
     const [errors, setErrors] = useState({});
     const [showPw, setShowPw] = useState(false);
 
-const [countdown, setCountdown] = useState(0);
-const [resendAvailable, setResendAvailable] = useState(true);
-    const navigate = useNavigate();
+    const [countdown, setCountdown] = useState(0);
+    const [resendAvailable, setResendAvailable] = useState(true);
+
 
     useEffect(() => {
         if (countdown === 0) {
@@ -58,11 +57,11 @@ const [resendAvailable, setResendAvailable] = useState(true);
             setLoading(true);
             await axios.post("http://localhost:8080/auth/send-otp", { email: targetEmail });
             Swal.fire({
-  title: "OTP Sent",
-  text: "Check your inbox (and spam folder) for the code.",
-  icon: "success"
-});
-             
+                title: "OTP Sent",
+                text: "Check your inbox (and spam folder) for the code.",
+                icon: "success"
+            });
+
             setStep("OTP");
 
             // Start countdown after sending
@@ -71,11 +70,11 @@ const [resendAvailable, setResendAvailable] = useState(true);
 
 
         } catch (e) {
-           Swal.fire({
-  title: "Error",
-  text: e.response?.data || "Unable to send OTP.",
-  icon: "error"
-});
+            Swal.fire({
+                title: "Error",
+                text: e.response?.data || "Unable to send OTP.",
+                icon: "error"
+            });
 
         } finally {
             setLoading(false);
@@ -107,7 +106,7 @@ const [resendAvailable, setResendAvailable] = useState(true);
     const register = async (e) => {
         e.preventDefault();
         resetErrors();
-debugger;
+        debugger;
         let invalid = false;
         if (form.uname.length < 3 || form.uname.length > 20 || /\s/.test(form.uname)) {
             setErrors((p) => ({ ...p, uname: "Name must be 3‑20 chars, no spaces" }));
