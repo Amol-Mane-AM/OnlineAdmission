@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
+import config from "../config";
 import { Chart as GoogleChart } from "react-google-charts";
 import { Doughnut } from "react-chartjs-2";
 import {
@@ -18,7 +19,7 @@ function Chart() {
   useEffect(() => {
     const getData = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/admissionData");
+        const res = await axios.get(`${config.API_URL}/admissionData`);
         const admissions = res.data._embedded?.admissions || [];
 
         const updatedData = admissions.map(entry => ({
@@ -102,7 +103,7 @@ function Chart() {
   return (
     <div className="container my-4">
       <h3 className="mb-4 text-center">Admission Status Overview</h3>
-      
+
       <div className="row">
         <div className="col-md-6 mb-4">
           <h6 className="text-center">Pie Chart</h6>

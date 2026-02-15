@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 
 
+import config from "../config";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function AdminDash() {
@@ -34,7 +35,7 @@ function AdminDash() {
 
   const getData = async () => {
     try {
-      const res = await axios.get("http://localhost:8080/admissionData");
+      const res = await axios.get(`${config.API_URL}/admissionData`);
       const admissions = res.data._embedded.admissions || [];
 
       const updatedData = admissions.map(entry => ({
@@ -71,7 +72,7 @@ function AdminDash() {
       await Promise.all(
         selectedIds.map((id) => {
           const record = admissionData.find((entry) => entry.id === id);
-          return axios.put(`http://localhost:8080/admission/admissionData/${id}`, {
+          return axios.put(`${config.API_URL}/admission/admissionData/${id}`, {
             ...record,
             status: newStatus,
           });
@@ -280,10 +281,10 @@ function AdminDash() {
                     <td>
                       <span
                         className={`badge ${entry.status === "APPROVED"
-                            ? "bg-success"
-                            : entry.status === "REJECTED"
-                              ? "bg-danger"
-                              : "bg-warning text-dark"
+                          ? "bg-success"
+                          : entry.status === "REJECTED"
+                            ? "bg-danger"
+                            : "bg-warning text-dark"
                           }`}
                       >
                         {entry.status}

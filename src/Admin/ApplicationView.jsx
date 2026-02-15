@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import config from "../config";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function ApplicationView() {
@@ -11,7 +12,7 @@ function ApplicationView() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    axios.get(`http://localhost:8080/admissionData/${id}`)
+    axios.get(`${config.API_URL}/admissionData/${id}`)
       .then((res) => {
         setApplication(res.data);
       })
@@ -23,7 +24,7 @@ function ApplicationView() {
 
   const handleViewReceipt = async () => {
     try {
-      const url = `http://localhost:8080/receipts/${application.receiptUrl}`;
+      const url = `${config.API_URL}/receipts/${application.receiptUrl}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to load receipt");
       const html = await response.text();
@@ -66,13 +67,12 @@ function ApplicationView() {
           <tr>
             <th>Status</th>
             <td>
-              <span className={`badge ${
-                application.status === "APPROVED"
-                  ? "bg-success"
-                  : application.status === "REJECTED"
-                    ? "bg-danger"
-                    : "bg-warning text-dark"
-              }`}>
+              <span className={`badge ${application.status === "APPROVED"
+                ? "bg-success"
+                : application.status === "REJECTED"
+                  ? "bg-danger"
+                  : "bg-warning text-dark"
+                }`}>
                 {application.status}
               </span>
             </td>

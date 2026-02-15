@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import swal from "sweetalert";
+import config from "../config";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function FullAdminDash() {
@@ -16,7 +17,7 @@ function FullAdminDash() {
   const getData = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("http://localhost:8080/admissionData");
+      const res = await axios.get(`${config.API_URL}/admissionData`);
       const admissions = res.data._embedded?.admissions || [];
 
       const updatedData = admissions.map((entry) => ({
@@ -47,7 +48,7 @@ function FullAdminDash() {
 
   const handleViewReceipt = async (receiptUrl) => {
     try {
-      const url = `http://localhost:8080/receipts/${receiptUrl}`;
+      const url = `${config.API_URL}/receipts/${receiptUrl}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Failed to load receipt");
       const html = await response.text();
@@ -66,11 +67,11 @@ function FullAdminDash() {
     setModalFade(false);
     setTimeout(() => setShowReceiptPopup(false), 300);
   };
-const statusColorMap = {
-  PENDING: "btn-warning",
-  APPROVED: "btn-success",
-  REJECTED: "btn-danger",
-};
+  const statusColorMap = {
+    PENDING: "btn-warning",
+    APPROVED: "btn-success",
+    REJECTED: "btn-danger",
+  };
 
   return (
     <div className="container my-4 hero-section">
@@ -78,24 +79,23 @@ const statusColorMap = {
 
       {/* Tabs */}
       <div className="mb-3">
-  {["PENDING", "APPROVED", "REJECTED"].map((status) => (
-  <button
-    key={status}
-    onClick={() => setActiveTab(status)}
-    className={`btn me-2 ${
-      activeTab === status ? statusColorMap[status] : ""
-    }`}
-    style={{
-      backgroundColor: activeTab === status ? undefined : "white",
-      border: "1px solid #ccc", // optional: add border so white buttons still look like buttons
-      color: activeTab === status ? undefined : "black",
-    }}
-  >
-    {status}
-  </button>
-))}
+        {["PENDING", "APPROVED", "REJECTED"].map((status) => (
+          <button
+            key={status}
+            onClick={() => setActiveTab(status)}
+            className={`btn me-2 ${activeTab === status ? statusColorMap[status] : ""
+              }`}
+            style={{
+              backgroundColor: activeTab === status ? undefined : "white",
+              border: "1px solid #ccc", // optional: add border so white buttons still look like buttons
+              color: activeTab === status ? undefined : "black",
+            }}
+          >
+            {status}
+          </button>
+        ))}
 
-</div>
+      </div>
 
       {loading ? (
         <div className="text-center py-4">

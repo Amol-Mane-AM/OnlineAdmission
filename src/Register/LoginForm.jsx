@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
+import config from "../config";
 
 
 
@@ -32,7 +33,7 @@ function LoginForm() {
     try {
       setLoading(true);
 
-      const res = await axios.post("http://localhost:8080/user/login", form);
+      const res = await axios.post(`${config.API_URL}/user/login`, form);
       console.log("res", res);
       swal("Success!", res.data.message || "Login.", "success");
 
@@ -68,7 +69,7 @@ function LoginForm() {
     }
 
     try {
-      await axios.post("http://localhost:8080/auth/send-otp-forget", {
+      await axios.post(`${config.API_URL}/auth/send-otp-forget`, {
         email: resetForm.email,
       });
       swal("OTP Sent", "Check your inbox (and spam folder) for the code.", "success");
@@ -101,7 +102,7 @@ function LoginForm() {
     }
 
     try {
-      await axios.put("http://localhost:8080/auth/reset-password", {
+      await axios.put(`${config.API_URL}/auth/reset-password`, {
         email,
         otp,
         newPassword,

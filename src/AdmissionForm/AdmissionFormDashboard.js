@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import swal from "sweetalert";
 import { Container, Row, Col, Form } from 'react-bootstrap';
+import config from '../config';
 
 function AdmissionFormDashboard() {
     debugger;
@@ -28,7 +29,7 @@ function AdmissionFormDashboard() {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:8080/admission/admissionData/email=${email}`
+                    `${config.API_URL}/admission/admissionData/email=${email}`
                 );
                 setAdmissionDetails(response.data);
                 console.log("Fetched admission details:", response.data);
@@ -55,14 +56,14 @@ function AdmissionFormDashboard() {
     const handleFee = async () => {
         debugger
         try {
-            const res = await axios.post('http://localhost:8080/admission/payment', {
+            const res = await axios.post(`${config.API_URL}/admission/payment`, {
                 amount: 500, // ₹50 in paise
             });
 
             const { orderId } = res.data;
 
             const options = {
-                key: 'rzp_test_HtewxQPZJvikZd', // Replace with your Razorpay Key ID
+                key: config.RAZORPAY_KEY_ID, // Replace with your Razorpay Key ID
                 amount: 500,
                 currency: 'INR',
                 name: 'Online Admission Form',
@@ -80,7 +81,7 @@ function AdmissionFormDashboard() {
                             name: `${admissionDetails.firstName} ${admissionDetails.surname}`
                         };
 
-                        const res = await axios.post('http://localhost:8080/admission/payment-success', paymentData);
+                        const res = await axios.post(`${config.API_URL}/admission/payment-success`, paymentData);
 
                         const receiptUrl = res.data.receiptUrl; // Assume backend returns a receipt link or HTML
                         swal("Success", "Payment successful!", "success");
@@ -131,7 +132,7 @@ function AdmissionFormDashboard() {
 
     const handleViewReceipt = async () => {
         try {
-            const url = `http://localhost:8080/receipts/${admissionDetails.receiptUrl}`;
+            const url = `${config.API_URL}/receipts/${admissionDetails.receiptUrl}`;
             const response = await fetch(url);
             if (!response.ok) throw new Error("Failed to load receipt");
             const html = await response.text();
@@ -201,7 +202,7 @@ function AdmissionFormDashboard() {
     };
     const handleUpdate = async () => {
         try {
-            const response = await axios.put(`http://localhost:8080/admissionData/${admissionDetails.id}`, editData);
+            const response = await axios.put(`${config.API_URL}/admissionData/${admissionDetails.id}`, editData);
             swal("Success", "Admission details updated successfully!", "success");
             setAdmissionDetails(response.data);
             window.location.reload();

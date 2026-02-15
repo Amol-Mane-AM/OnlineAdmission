@@ -7,478 +7,479 @@ import { useRef } from 'react';
 import axios from "axios";
 import swal from 'sweetalert';
 import confetti from 'canvas-confetti';
+import config from '../config';
 
 function NewApplication() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
-    const [formData, setFormData] = useState({
-        schoolName: "Pune",
-        curriculum: "CBSC",
-        academicYear: "2024-2025",
-        grade: "",
-        applicationDate: new Date().toISOString().split('T')[0],
-        category: "",
-        firstName: sessionStorage.getItem("name") || "", // safe way,
-        middleName: "",
-        surname: "",
-        dob: "",
-        nationality: "",
-        gender: "",
-        motherTongue: "",
-        birthCountry: "",
-        placeOfBirth: "",
-        email:sessionStorage.getItem("email") || "",
-        contactNumber:'',
-        // other optional fields
+  const [formData, setFormData] = useState({
+    schoolName: "Pune",
+    curriculum: "CBSC",
+    academicYear: "2024-2025",
+    grade: "",
+    applicationDate: new Date().toISOString().split('T')[0],
+    category: "",
+    firstName: sessionStorage.getItem("name") || "", // safe way,
+    middleName: "",
+    surname: "",
+    dob: "",
+    nationality: "",
+    gender: "",
+    motherTongue: "",
+    birthCountry: "",
+    placeOfBirth: "",
+    email: sessionStorage.getItem("email") || "",
+    contactNumber: '',
+    // other optional fields
+  });
+
+
+
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
     });
 
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Clear the error for the current field if user updates it
+    setErrors((prev) => ({
+      ...prev,
+      [name]: '', // Clear error message
+    }));
+
+  };
 
 
-    const [errors, setErrors] = useState({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
+  const schoolNameRef = useRef();
+  const academicYearRef = useRef();
+  const gradeRef = useRef();
+  const applicationDateRef = useRef();
+  const categoryRef = useRef();
+  const firstNameRef = useRef();
+  const surnameRef = useRef();
+  const dobRef = useRef();
+  const nationalityRef = useRef();
+  const genderRef = useRef();
+  const motherTongueRef = useRef();
+  const placeOfBirthRef = useRef();
+  const emailRef = useRef();
+
+  const handleSubmitApplication = async (e) => {
+    debugger;
+    e.preventDefault();
 
 
-    const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+    // Validate required fields
+    const err = {};
 
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value,
+    if (!formData.schoolName.trim()) err.schoolName = "School name is required.";
+    if (!formData.academicYear.trim()) err.academicYear = "Academic year is required.";
+    if (!formData.grade) err.grade = "Please select a grade.";
+    if (!formData.applicationDate) err.applicationDate = "Application date is required.";
+    if (!formData.category) err.category = "Category is required.";
+    if (!formData.firstName.trim()) err.firstName = "First name is required.";
+    if (!formData.surname.trim()) err.surname = "Surname is required.";
+    if (!formData.dob) err.dob = "Date of birth is required.";
+    if (!formData.nationality) err.nationality = "Please select nationality.";
+    if (!formData.gender) err.gender = "Please select gender.";
+    if (!formData.motherTongue) err.motherTongue = "Please select mother tongue.";
+    if (!formData.placeOfBirth.trim()) err.placeOfBirth = "Place of birth is required.";
+    if (!formData.email.trim()) err.email = "email is required.";
+
+
+
+
+
+    if (Object.keys(err).length > 0) {
+      setErrors(err);
+
+      const fieldRefs = {
+        schoolName: schoolNameRef,
+        academicYear: academicYearRef,
+        grade: gradeRef,
+        applicationDate: applicationDateRef,
+        category: categoryRef,
+        firstName: firstNameRef,
+        surname: surnameRef,
+        dob: dobRef,
+        nationality: nationalityRef,
+        gender: genderRef,
+        motherTongue: motherTongueRef,
+        placeOfBirth: placeOfBirthRef,
+        email: emailRef,
+      };
+
+      for (const key of Object.keys(err)) {
+        const ref = fieldRefs[key];
+        if (ref?.current) {
+          ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
+          ref.current.focus();
+          break;
+        }
+      }
+
+      return;
+    }
+
+
+
+
+
+    setIsSubmitting(true);
+    //npm install canvas-confetti
+
+    // Simulate API call or navigate
+    setTimeout(async () => {
+      try {
+        await axios.post(`${config.API_URL}/admission/save`, formData);
+
+        // Show swal with auto-close after 2 seconds (2000 ms)
+        swal({
+          title: "Success! 🎉",
+          text: "Application submitted successfully!",
+          icon: "success",
+          buttons: false,       // no buttons shown
+          timer: 2000           // auto close after 2 seconds
         });
 
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+        // Immediately trigger confetti
+        confetti({
+          particleCount: 150,
+          spread: 170,
+          origin: { y: 0.6 }
+        });
 
-        // Clear the error for the current field if user updates it
-        setErrors((prev) => ({
-            ...prev,
-            [name]: '', // Clear error message
-        }));
+        // Navigate after 2 seconds (same as swal timer)
+        setTimeout(() => {
+          navigate('/AdmissionFormDashboard');
+        }, 2000);
 
-    };
-
-
-    const schoolNameRef = useRef();
-    const academicYearRef = useRef();
-    const gradeRef = useRef();
-    const applicationDateRef = useRef();
-    const categoryRef = useRef();
-    const firstNameRef = useRef();
-    const surnameRef = useRef();
-    const dobRef = useRef();
-    const nationalityRef = useRef();
-    const genderRef = useRef();
-    const motherTongueRef = useRef();
-    const placeOfBirthRef = useRef();
-const emailRef = useRef();
-
-    const handleSubmitApplication = async (e) => {
-        debugger;
-        e.preventDefault();
+      } catch (error) {
+        console.error("Error submitting application:", error);
+        swal("Error", "Failed to submit application. Please try again.", "error");
+      } finally {
+        setIsSubmitting(false);
+      }
+    }, 1000);
 
 
-        // Validate required fields
-        const err = {};
-
-        if (!formData.schoolName.trim()) err.schoolName = "School name is required.";
-        if (!formData.academicYear.trim()) err.academicYear = "Academic year is required.";
-        if (!formData.grade) err.grade = "Please select a grade.";
-        if (!formData.applicationDate) err.applicationDate = "Application date is required.";
-        if (!formData.category) err.category = "Category is required.";
-        if (!formData.firstName.trim()) err.firstName = "First name is required.";
-        if (!formData.surname.trim()) err.surname = "Surname is required.";
-        if (!formData.dob) err.dob = "Date of birth is required.";
-        if (!formData.nationality) err.nationality = "Please select nationality.";
-        if (!formData.gender) err.gender = "Please select gender.";
-        if (!formData.motherTongue) err.motherTongue = "Please select mother tongue.";
-        if (!formData.placeOfBirth.trim()) err.placeOfBirth = "Place of birth is required.";
-        if (!formData.email.trim()) err.email = "email is required.";
+  };
 
 
+  return (
+    <>
+      <AdmissionFormDashboardHeasder />
+      <Form onSubmit={handleSubmitApplication}>
+        <Container className="bg-white p-4 shadow-sm rounded mb-4">
+          <h5 className="fw-bold mb-3">Application Details</h5>
+          <Row className="mb-3">
+            <Col md={3}>
+              <Form.Group controlId="schoolName">
+                <Form.Label>School Name <span className="text-danger">*</span></Form.Label>
+                <Form.Control type="text" name="schoolName" onChange={handleChange} value={formData.schoolName} isInvalid={!!errors.schoolName} ref={schoolNameRef} />
+                <Form.Control.Feedback type="invalid">
+                  {errors.schoolName}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+            <Col md={2}>
+              <Form.Group controlId="curriculum">
+                <Form.Label>Curriculum</Form.Label>
+                <Form.Control type="text" name="curriculum" onChange={handleChange} value={formData.curriculum} />
+              </Form.Group>
+            </Col>
+            <Col md={2}>
+              <Form.Group controlId="academicYear">
+                <Form.Label>Academic Year <span className="text-danger">*</span></Form.Label>
+                <Form.Control type="text" name="academicYear" onChange={handleChange} value={formData.academicYear} isInvalid={!!errors.academicYear} ref={academicYearRef} readOnly />
+                <Form.Control.Feedback type="invalid">
+                  {errors.academicYear}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
 
+            <Col md={3}>
+              <Form.Group controlId="grade">
+                <Form.Label>Grade Applying For <span className="text-danger">*</span></Form.Label>
+                <Form.Select name="grade" onChange={handleChange} value={formData.grade} isInvalid={!!errors.grade} ref={gradeRef}>
+                  <option value="">Please Select</option>
+                  <option value="Grade1">Grade 1</option>
+                  <option value="Grade2">Grade 2</option>
+                  <option value="Grade3">Grade 3</option>
+                  <option value="Grade4">Grade 4</option>
+                  <option value="Grade5">Grade 5</option>
+                  <option value="Grade6">Grade 6</option>
+                  <option value="Grade7">Grade 7</option>
+                  <option value="Grade8">Grade 8</option>
+                  <option value="Grade9">Grade 9</option>
+                  <option value="Grade10">Grade 10</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.grade}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
 
+            <Col md={2}>
+              <Form.Group controlId="applicationDate">
+                <Form.Label>Application Date <span className="text-danger">*</span></Form.Label>
+                <Form.Control type="date" name="applicationDate" onChange={handleChange} value={formData.applicationDate} isInvalid={!!errors.applicationDate} ref={applicationDateRef} readOnly />
+                <Form.Control.Feedback type="invalid">
+                  {errors.applicationDate}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+          </Row>
 
-        if (Object.keys(err).length > 0) {
-            setErrors(err);
-
-            const fieldRefs = {
-                schoolName: schoolNameRef,
-                academicYear: academicYearRef,
-                grade: gradeRef,
-                applicationDate: applicationDateRef,
-                category: categoryRef,
-                firstName: firstNameRef,
-                surname: surnameRef,
-                dob: dobRef,
-                nationality: nationalityRef,
-                gender: genderRef,
-                motherTongue: motherTongueRef,
-                placeOfBirth: placeOfBirthRef,
-                email:emailRef,
-            };
-
-            for (const key of Object.keys(err)) {
-                const ref = fieldRefs[key];
-                if (ref?.current) {
-                    ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
-                    ref.current.focus();
-                    break;
-                }
-            }
-
-            return;
-        }
-
-
-
-
-
-        setIsSubmitting(true);
-        //npm install canvas-confetti
-
-// Simulate API call or navigate
-setTimeout(async () => {
-  try {
-    await axios.post("http://localhost:8080/admission/save", formData);
-
-    // Show swal with auto-close after 2 seconds (2000 ms)
-    swal({
-      title: "Success! 🎉",
-      text: "Application submitted successfully!",
-      icon: "success",
-      buttons: false,       // no buttons shown
-      timer: 2000           // auto close after 2 seconds
-    });
-
-    // Immediately trigger confetti
-    confetti({
-      particleCount: 150,
-      spread: 170,
-      origin: { y: 0.6 }
-    });
-
-    // Navigate after 2 seconds (same as swal timer)
-    setTimeout(() => {
-      navigate('/AdmissionFormDashboard');
-    }, 2000);
-
-  } catch (error) {
-    console.error("Error submitting application:", error);
-    swal("Error", "Failed to submit application. Please try again.", "error");
-  } finally {
-    setIsSubmitting(false);
-  }
-}, 1000);
-
-
-    };
-
-
-    return (
-        <>
-            <AdmissionFormDashboardHeasder />
-            <Form onSubmit={handleSubmitApplication}>
-                <Container className="bg-white p-4 shadow-sm rounded mb-4">
-                    <h5 className="fw-bold mb-3">Application Details</h5>
-                    <Row className="mb-3">
-                        <Col md={3}>
-                            <Form.Group controlId="schoolName">
-                                <Form.Label>School Name <span className="text-danger">*</span></Form.Label>
-                                <Form.Control type="text" name="schoolName" onChange={handleChange} value={formData.schoolName} isInvalid={!!errors.schoolName} ref={schoolNameRef} />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.schoolName}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                        <Col md={2}>
-                            <Form.Group controlId="curriculum">
-                                <Form.Label>Curriculum</Form.Label>
-                                <Form.Control type="text" name="curriculum" onChange={handleChange} value={formData.curriculum} />
-                            </Form.Group>
-                        </Col>
-                        <Col md={2}>
-                            <Form.Group controlId="academicYear">
-                                <Form.Label>Academic Year <span className="text-danger">*</span></Form.Label>
-                                <Form.Control type="text" name="academicYear" onChange={handleChange} value={formData.academicYear} isInvalid={!!errors.academicYear} ref={academicYearRef} readOnly />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.academicYear}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-
-                        <Col md={3}>
-                            <Form.Group controlId="grade">
-                                <Form.Label>Grade Applying For <span className="text-danger">*</span></Form.Label>
-                                <Form.Select name="grade" onChange={handleChange} value={formData.grade} isInvalid={!!errors.grade} ref={gradeRef}>
-                                    <option value="">Please Select</option>
-                                    <option value="Grade1">Grade 1</option>
-                                    <option value="Grade2">Grade 2</option>
-                                    <option value="Grade3">Grade 3</option>
-                                    <option value="Grade4">Grade 4</option>
-                                    <option value="Grade5">Grade 5</option>
-                                    <option value="Grade6">Grade 6</option>
-                                    <option value="Grade7">Grade 7</option>
-                                    <option value="Grade8">Grade 8</option>
-                                    <option value="Grade9">Grade 9</option>
-                                    <option value="Grade10">Grade 10</option>
-                                </Form.Select>
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.grade}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-
-                        <Col md={2}>
-                            <Form.Group controlId="applicationDate">
-                                <Form.Label>Application Date <span className="text-danger">*</span></Form.Label>
-                                <Form.Control type="date" name="applicationDate" onChange={handleChange} value={formData.applicationDate} isInvalid={!!errors.applicationDate} ref={applicationDateRef} readOnly />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.applicationDate}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row className="mb-3">
-                        <Col md={3}>
-                            <Form.Group controlId="category">
-                                <Form.Label>Category <span className="text-danger">*</span></Form.Label>
-                                <Form.Select name="category" onChange={handleChange} value={formData.category} isInvalid={!!errors.category} ref={categoryRef}>
-                                    <option value="">Please Select</option>
-                                    <option value="General">General</option>
-                                    <option value="Sports">Sports</option>
-                                    <option value="Staff">Staff</option>
-                                </Form.Select>
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.category}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                        {/* <Col md={3}>
+          <Row className="mb-3">
+            <Col md={3}>
+              <Form.Group controlId="category">
+                <Form.Label>Category <span className="text-danger">*</span></Form.Label>
+                <Form.Select name="category" onChange={handleChange} value={formData.category} isInvalid={!!errors.category} ref={categoryRef}>
+                  <option value="">Please Select</option>
+                  <option value="General">General</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Staff">Staff</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.category}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+            {/* <Col md={3}>
             <Form.Group controlId="passportPhoto">
               <Form.Label>Passport Photo</Form.Label>
               <Form.Control type="file" name="passportPhoto" accept=".jpeg,.jpg,.png" />
               <Form.Text className="text-muted">Max 2MB (.jpeg/.png)</Form.Text>
             </Form.Group>
           </Col> */}
-                    </Row>
+          </Row>
 
-                    <h5 className="fw-bold mb-3">Student Details</h5>
-                    <Row className="mb-3">
-                        <Col md={4}>
-                            <Form.Group controlId="firstName">
-                                <Form.Label>Child's First Name <span className="text-danger">*</span></Form.Label>
-                                <Form.Control name="firstName" placeholder="CHILD'S FIRST NAME" onChange={handleChange} value={formData.firstName} isInvalid={!!errors.firstName} ref={firstNameRef} />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.firstName}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                        <Col md={4}>
-                            <Form.Group controlId="middleName">
-                                <Form.Label>Child's Middle Name</Form.Label>
-                                <Form.Control name="middleName" placeholder="CHILD'S MIDDLE NAME" onChange={handleChange} value={formData.middleName} />
-                            </Form.Group>
-                        </Col>
-                        <Col md={4}>
-                            <Form.Group controlId="surname">
-                                <Form.Label>Child's Surname <span className="text-danger">*</span></Form.Label>
-                                <Form.Control name="surname" placeholder="CHILD'S FAMILY NAME" onChange={handleChange} value={formData.surname} isInvalid={!!errors.surname} ref={surnameRef} />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.surname}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                    </Row>
+          <h5 className="fw-bold mb-3">Student Details</h5>
+          <Row className="mb-3">
+            <Col md={4}>
+              <Form.Group controlId="firstName">
+                <Form.Label>Child's First Name <span className="text-danger">*</span></Form.Label>
+                <Form.Control name="firstName" placeholder="CHILD'S FIRST NAME" onChange={handleChange} value={formData.firstName} isInvalid={!!errors.firstName} ref={firstNameRef} />
+                <Form.Control.Feedback type="invalid">
+                  {errors.firstName}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="middleName">
+                <Form.Label>Child's Middle Name</Form.Label>
+                <Form.Control name="middleName" placeholder="CHILD'S MIDDLE NAME" onChange={handleChange} value={formData.middleName} />
+              </Form.Group>
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="surname">
+                <Form.Label>Child's Surname <span className="text-danger">*</span></Form.Label>
+                <Form.Control name="surname" placeholder="CHILD'S FAMILY NAME" onChange={handleChange} value={formData.surname} isInvalid={!!errors.surname} ref={surnameRef} />
+                <Form.Control.Feedback type="invalid">
+                  {errors.surname}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+          </Row>
 
-                    <Row className="mb-3">
-                        <Col md={4}>
-                            <Form.Group controlId="dob">
-                                <Form.Label>
-                                    Date of Birth <span className="text-danger">*</span>
-                                </Form.Label>
-                                <Form.Control
-                                    type="date"
-                                    name="dob"
-                                    onChange={handleChange}
-                                    value={formData.dob}
-                                    isInvalid={!!errors.dob}
-                                    ref={dobRef}
-                                    max={new Date().toISOString().split('T')[0]} 
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.dob}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
+          <Row className="mb-3">
+            <Col md={4}>
+              <Form.Group controlId="dob">
+                <Form.Label>
+                  Date of Birth <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Control
+                  type="date"
+                  name="dob"
+                  onChange={handleChange}
+                  value={formData.dob}
+                  isInvalid={!!errors.dob}
+                  ref={dobRef}
+                  max={new Date().toISOString().split('T')[0]}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.dob}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
 
-                        <Col md={4}>
-                            <Form.Group controlId="nationality">
-                                <Form.Label>
-                                    Nationality <span className="text-danger">*</span>
-                                </Form.Label>
-                                <Form.Select
-                                    name="nationality"
-                                    value={formData.nationality}
-                                    onChange={handleChange}
-                                    isInvalid={!!errors.nationality}
-                                    ref={nationalityRef}
-                                >
-                                    <option value="">Please Select</option>
-                                    <option value="Indian">Indian</option>
-                                    <option value="Other">Other</option>
-                                </Form.Select>
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.nationality}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
+            <Col md={4}>
+              <Form.Group controlId="nationality">
+                <Form.Label>
+                  Nationality <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Select
+                  name="nationality"
+                  value={formData.nationality}
+                  onChange={handleChange}
+                  isInvalid={!!errors.nationality}
+                  ref={nationalityRef}
+                >
+                  <option value="">Please Select</option>
+                  <option value="Indian">Indian</option>
+                  <option value="Other">Other</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.nationality}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
 
-                        <Col md={4}>
-                            <Form.Group controlId="gender">
-                                <Form.Label>
-                                    Gender <span className="text-danger">*</span>
-                                </Form.Label>
-                                <Form.Select
-                                    name="gender"
-                                    value={formData.gender}
-                                    onChange={handleChange}
-                                    isInvalid={!!errors.gender}
-                                    ref={genderRef}
-                                >
-                                    <option value="">Please Select</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </Form.Select>
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.gender}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
+            <Col md={4}>
+              <Form.Group controlId="gender">
+                <Form.Label>
+                  Gender <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Select
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleChange}
+                  isInvalid={!!errors.gender}
+                  ref={genderRef}
+                >
+                  <option value="">Please Select</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.gender}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
 
-                    </Row>
+          </Row>
 
-                    <Row className="mb-4">
-                        <Col md={4}>
-                            <Form.Group controlId="motherTongue">
-                                <Form.Label>
-                                    Mother Tongue <span className="text-danger">*</span>
-                                </Form.Label>
-                                <Form.Select
-                                    name="motherTongue"
-                                    value={formData.motherTongue}
-                                    onChange={handleChange}
-                                    isInvalid={!!errors.motherTongue}
-                                    ref={motherTongueRef}
-                                >
-                                    <option value="">Please Select</option>
-                                    <option value="Marathi">Marathi</option>
-                                    <option value="Hindi">Hindi</option>
-                                    <option value="English">English</option>
-                                    <option value="Gujarati">Gujarati</option>
-                                    <option value="Other">Other</option>
-                                </Form.Select>
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.motherTongue}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
+          <Row className="mb-4">
+            <Col md={4}>
+              <Form.Group controlId="motherTongue">
+                <Form.Label>
+                  Mother Tongue <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Select
+                  name="motherTongue"
+                  value={formData.motherTongue}
+                  onChange={handleChange}
+                  isInvalid={!!errors.motherTongue}
+                  ref={motherTongueRef}
+                >
+                  <option value="">Please Select</option>
+                  <option value="Marathi">Marathi</option>
+                  <option value="Hindi">Hindi</option>
+                  <option value="English">English</option>
+                  <option value="Gujarati">Gujarati</option>
+                  <option value="Other">Other</option>
+                </Form.Select>
+                <Form.Control.Feedback type="invalid">
+                  {errors.motherTongue}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
 
-                        <Col md={4}>
-                            <Form.Group controlId="birthCountry">
-                                <Form.Label>Birth Country</Form.Label>
-                                <Form.Select name="birthCountry" onChange={handleChange} value={formData.birthCountry}>
-                                    <option value="">Please Select</option>
-                                    <option value="India">India</option>
-                                    <option value="United States">United States</option>
-                                    <option value="United Kingdom">United Kingdom</option>
-                                    <option value="Canada">Canada</option>
-                                    <option value="Australia">Australia</option>
-                                    <option value="Germany">Germany</option>
-                                    <option value="France">France</option>
-                                    <option value="Japan">Japan</option>
-                                    <option value="China">China</option>
-                                    <option value="Other">Other</option>
-                                </Form.Select>
-                            </Form.Group>
-                        </Col>
+            <Col md={4}>
+              <Form.Group controlId="birthCountry">
+                <Form.Label>Birth Country</Form.Label>
+                <Form.Select name="birthCountry" onChange={handleChange} value={formData.birthCountry}>
+                  <option value="">Please Select</option>
+                  <option value="India">India</option>
+                  <option value="United States">United States</option>
+                  <option value="United Kingdom">United Kingdom</option>
+                  <option value="Canada">Canada</option>
+                  <option value="Australia">Australia</option>
+                  <option value="Germany">Germany</option>
+                  <option value="France">France</option>
+                  <option value="Japan">Japan</option>
+                  <option value="China">China</option>
+                  <option value="Other">Other</option>
+                </Form.Select>
+              </Form.Group>
+            </Col>
 
-                        <Col md={4}>
-                            <Form.Group controlId="placeOfBirth">
-                                <Form.Label>
-                                    Place of Birth <span className="text-danger">*</span>
-                                </Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    name="placeOfBirth"
-                                    placeholder="PLACE OF BIRTH"
-                                    value={formData.placeOfBirth}
-                                    onChange={handleChange}
-                                    isInvalid={!!errors.placeOfBirth}
-                                    ref={placeOfBirthRef}
-                                />
-                                <Form.Control.Feedback type="invalid">
-                                    {errors.placeOfBirth}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
+            <Col md={4}>
+              <Form.Group controlId="placeOfBirth">
+                <Form.Label>
+                  Place of Birth <span className="text-danger">*</span>
+                </Form.Label>
+                <Form.Control
+                  type="text"
+                  name="placeOfBirth"
+                  placeholder="PLACE OF BIRTH"
+                  value={formData.placeOfBirth}
+                  onChange={handleChange}
+                  isInvalid={!!errors.placeOfBirth}
+                  ref={placeOfBirthRef}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.placeOfBirth}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
 
-                    </Row>
+          </Row>
 
 
-                </Container>
+        </Container>
 
-                <Container className="bg-white p-4 shadow-sm rounded mb-4">
-                    <h5 className="fw-bold mb-3">Contact Number and Email Address</h5>
-                    <Row className="mb-3">
-                         <Col md={6}>
-            <Form.Group controlId="contactNumber">
+        <Container className="bg-white p-4 shadow-sm rounded mb-4">
+          <h5 className="fw-bold mb-3">Contact Number and Email Address</h5>
+          <Row className="mb-3">
+            <Col md={6}>
+              <Form.Group controlId="contactNumber">
                 <Form.Label>Contact Number</Form.Label>
                 <InputGroup>
-                    <InputGroup.Text>+91</InputGroup.Text>
-                    <Form.Control
-                        type="text"
-                        name="contactNumber"
-                        maxLength={10}
-                        placeholder="Enter 10-digit number"
-                        value={formData.contactNumber}
-                        onChange={(e) => {
-                            const val = e.target.value;
-                            // Allow only digits
-                            if (/^\d{0,10}$/.test(val)) {
-                                // Validate first digit (optional)
-                                if (val.length === 0 || /^[7-9]/.test(val)) {
-                                    handleChange(e);
-                                }
-                            }
-                        }}
-                        isInvalid={!!errors.contactNumber}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        {errors.contactNumber}
-                    </Form.Control.Feedback>
+                  <InputGroup.Text>+91</InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    name="contactNumber"
+                    maxLength={10}
+                    placeholder="Enter 10-digit number"
+                    value={formData.contactNumber}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      // Allow only digits
+                      if (/^\d{0,10}$/.test(val)) {
+                        // Validate first digit (optional)
+                        if (val.length === 0 || /^[7-9]/.test(val)) {
+                          handleChange(e);
+                        }
+                      }
+                    }}
+                    isInvalid={!!errors.contactNumber}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.contactNumber}
+                  </Form.Control.Feedback>
                 </InputGroup>
-            </Form.Group>
-        </Col>
-                        <Col md={6}>
-                            <Form.Group controlId="email">
-                                <Form.Label>Email ID <span className="text-danger">*</span></Form.Label>
-                                <Form.Control type="email" id="email" name="email"  onChange={handleChange} value={formData.email} isInvalid={!!errors.email} ref={emailRef} readOnly />
-                             <Form.Control.Feedback type="invalid">
-                                    {errors.email}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                        </Col>
-                    </Row>
+              </Form.Group>
+            </Col>
+            <Col md={6}>
+              <Form.Group controlId="email">
+                <Form.Label>Email ID <span className="text-danger">*</span></Form.Label>
+                <Form.Control type="email" id="email" name="email" onChange={handleChange} value={formData.email} isInvalid={!!errors.email} ref={emailRef} readOnly />
+                <Form.Control.Feedback type="invalid">
+                  {errors.email}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+          </Row>
 
-                     
-                </Container>
 
-                {/* 
+        </Container>
+
+        {/* 
 <Container className="bg-white p-4 shadow-sm rounded mb-4">
   <h5 className="fw-bold mb-3">Enter Father's Details</h5>
   <Row className="mb-3">
@@ -646,7 +647,7 @@ setTimeout(async () => {
   </Row>
 </Container> */}
 
-                {/* <Container className="bg-white p-4 shadow-sm rounded mb-4">
+        {/* <Container className="bg-white p-4 shadow-sm rounded mb-4">
   <h5 className="fw-bold mb-3">Enter Mother's Details</h5>
   <Row className="mb-3">
     <Col md={2}>
@@ -813,7 +814,7 @@ setTimeout(async () => {
   </Row>
 </Container> */}
 
-                {/* <Container className="bg-white p-4 shadow-sm rounded mb-4">
+        {/* <Container className="bg-white p-4 shadow-sm rounded mb-4">
   <h5 className="fw-bold mb-3">Address Details</h5>
 
   <Row>
@@ -932,7 +933,7 @@ setTimeout(async () => {
   </Row>
 </Container> */}
 
-                {/* <Container className="bg-white p-4 shadow-sm rounded mb-4">
+        {/* <Container className="bg-white p-4 shadow-sm rounded mb-4">
   <h5 className="fw-bold mb-3">Current School Details</h5>
 
   <Row className="mb-3">
@@ -1064,7 +1065,7 @@ setTimeout(async () => {
   </Row>
 </Container> */}
 
-                {/* <Container className="bg-white p-4 shadow-sm rounded mb-4">
+        {/* <Container className="bg-white p-4 shadow-sm rounded mb-4">
   <h5 className="fw-bold mb-3">Additional Details</h5>
   <Form.Group controlId="heardAbout">
     <Form.Label>I heard about the school from / through <span className="text-danger">*</span></Form.Label>
@@ -1078,66 +1079,66 @@ setTimeout(async () => {
   </Form.Group>
 </Container> */}
 
-                <Container className="bg-white p-4 shadow-sm rounded mb-4">
-                    <h5 className="fw-bold mb-3">Declaration</h5>
+        <Container className="bg-white p-4 shadow-sm rounded mb-4">
+          <h5 className="fw-bold mb-3">Declaration</h5>
 
-                    <Form.Group controlId="declaration">
-                        <Form.Check
-                            type="checkbox"
-                            id="agreeDeclaration"
-                            name="agreeDeclaration"
-                            label=""
-                            required
-                        />
-                        <Form.Text className="text-danger fw-bold"> *</Form.Text>
+          <Form.Group controlId="declaration">
+            <Form.Check
+              type="checkbox"
+              id="agreeDeclaration"
+              name="agreeDeclaration"
+              label=""
+              required
+            />
+            <Form.Text className="text-danger fw-bold"> *</Form.Text>
 
-                        <div className="mt-2">
-                            <ol className="mb-3 ps-3" style={{ lineHeight: "1.6" }}>
-                                <li>I hereby declare that:
-                                    <ul>
-                                        <li>a. I have carefully read through the rules, regulations, admission procedure and document requirements on the school website.</li>
-                                        <li>b. The information provided in this form is true.</li>
-                                    </ul>
-                                </li>
-                                <li>I accept that incomplete/inaccurate information or any duplication/manipulation will result in:
-                                    <ul>
-                                        <li>a. Rejection of the application without any consideration.</li>
-                                        <li>b. Cancellation of offer of provisional admission/admission and any advance fee paid will not be refunded.</li>
-                                    </ul>
-                                </li>
-                            </ol>
-                        </div>
-                    </Form.Group>
+            <div className="mt-2">
+              <ol className="mb-3 ps-3" style={{ lineHeight: "1.6" }}>
+                <li>I hereby declare that:
+                  <ul>
+                    <li>a. I have carefully read through the rules, regulations, admission procedure and document requirements on the school website.</li>
+                    <li>b. The information provided in this form is true.</li>
+                  </ul>
+                </li>
+                <li>I accept that incomplete/inaccurate information or any duplication/manipulation will result in:
+                  <ul>
+                    <li>a. Rejection of the application without any consideration.</li>
+                    <li>b. Cancellation of offer of provisional admission/admission and any advance fee paid will not be refunded.</li>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+          </Form.Group>
 
-                    <Form.Group controlId="declarationName" className="mb-3">
-                        <Form.Label>Name <span className="text-danger">*</span></Form.Label>
-                        <Form.Control type="text" id="declarationName" name="declarationName" placeholder="NAME" required />
-                    </Form.Group>
+          <Form.Group controlId="declarationName" className="mb-3">
+            <Form.Label>Name <span className="text-danger">*</span></Form.Label>
+            <Form.Control type="text" id="declarationName" name="declarationName" placeholder="NAME" required />
+          </Form.Group>
 
-                    <div className="d-flex justify-content-end align-items-center">
-                        <small className="me-auto text-muted">
-                            * Please <strong>DO NOT CLOSE OR REFRESH</strong> the page while your application is being processed.
-                        </small>
-                        <Button
-                            variant="danger"
-                            type="submit"
-                            className="me-2"
-                            disabled={isSubmitting}
-                        >
-                            {isSubmitting ? "Submitting..." : "Submit Application"}
-                        </Button>
+          <div className="d-flex justify-content-end align-items-center">
+            <small className="me-auto text-muted">
+              * Please <strong>DO NOT CLOSE OR REFRESH</strong> the page while your application is being processed.
+            </small>
+            <Button
+              variant="danger"
+              type="submit"
+              className="me-2"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit Application"}
+            </Button>
 
-                        <Button variant="secondary" onClick={() => navigate('/AdmissionFormDashboard')}>Cancel</Button>
-                    </div>
-                </Container>
-            </Form>
+            <Button variant="secondary" onClick={() => navigate('/AdmissionFormDashboard')}>Cancel</Button>
+          </div>
+        </Container>
+      </Form>
 
-            {/* <Container className="text-end">
+      {/* <Container className="text-end">
         <Button variant="success" type="submit" className="me-2">Submit</Button>
         <Button variant="secondary" onClick={() => navigate('/AdmissionFormDashboard')}>Cancel</Button>
       </Container> */}
-        </>
-    );
+    </>
+  );
 }
 
 export default NewApplication;

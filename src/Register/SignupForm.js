@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { Eye, EyeOff } from "lucide-react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-
+import config from "../config";
 
 
 function SignupForm() {
@@ -55,7 +55,7 @@ function SignupForm() {
 
         try {
             setLoading(true);
-            await axios.post("http://localhost:8080/auth/send-otp", { email: targetEmail });
+            await axios.post(`${config.API_URL}/auth/send-otp`, { email: targetEmail });
             Swal.fire({
                 title: "OTP Sent",
                 text: "Check your inbox (and spam folder) for the code.",
@@ -92,7 +92,7 @@ function SignupForm() {
 
         try {
             setLoading(true);
-            await axios.post("http://localhost:8080/auth/verify-otp", { email, otp });
+            await axios.post(`${config.API_URL}/auth/verify-otp`, { email, otp });
             swal("Verified", "OTP verified. Please complete the form.", "success");
             setStep("FORM");
 
@@ -120,7 +120,7 @@ function SignupForm() {
 
         try {
             setLoading(true);
-            await axios.post("http://localhost:8080/user/register", {
+            await axios.post(`${config.API_URL}/user/register`, {
                 email,
                 uname: form.uname,
                 password: form.password,

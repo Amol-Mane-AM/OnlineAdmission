@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import config from "../config";
 
 function ViewUsers() {
   const [users, setUsers] = useState([]);
@@ -7,7 +8,7 @@ function ViewUsers() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get("http://localhost:8080/userdata");
+        const res = await axios.get(`${config.API_URL}/userdata`);
         const dataArray = res.data._embedded?.users || [];
         setUsers(dataArray);
       } catch (error) {
