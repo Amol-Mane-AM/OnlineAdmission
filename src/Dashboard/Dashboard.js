@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { ThemeContext } from "./ThemeContext";
+import React, { useState, useEffect } from 'react';
 import Schoolimg from "./Img/school.jpg";
 import MissionImg from "./Img/mission.jpg";
 import VissionImg from "./Img/vission.jpg";
