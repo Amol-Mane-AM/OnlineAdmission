@@ -11,7 +11,7 @@ import {
   Tooltip,
   Legend
 } from 'chart.js';
-import ViewUsers from "./ViewUsers";
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -29,7 +29,7 @@ function AdminDash() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const openModal = () => setShowModal(true);
+
   const closeModal = () => setShowModal(false);
 
   const getData = async () => {
@@ -237,197 +237,196 @@ function AdminDash() {
             </div>
           )}
 
-           <div className="table-responsive">
-  <table className="table table-bordered table-striped">
-    <thead className="table-dark">
-      <tr>
-        <th>Select</th>
-        <th>#</th>
-        <th onClick={() => handleSort("firstName")} style={{ cursor: "pointer" }}>
-          Full Name {getSortIcon("firstName")}
-        </th>
-        <th onClick={() => handleSort("email")} style={{ cursor: "pointer" }}>
-          Email {getSortIcon("email")}
-        </th>
-        <th onClick={() => handleSort("contactNumber")} style={{ cursor: "pointer" }}>
-          Mobile {getSortIcon("contactNumber")}
-        </th>
-        <th>Gender</th>
-        <th>DOB</th>
-        <th onClick={() => handleSort("status")} style={{ cursor: "pointer" }}>
-          Status {getSortIcon("status")}
-        </th>
-        <th>Payment</th>
-        <th>View Application</th>
-      </tr>
-    </thead>
-    <tbody>
-      {currentData.map((entry, index) => (
-        <tr key={entry.id}>
-          <td>
-            <input
-              type="checkbox"
-              checked={selectedIds.includes(entry.id)}
-              onChange={() => handleCheckboxChange(entry.id)}
-            />
-          </td>
-          <td>{indexOfFirst + index + 1}</td>
-          <td>{entry.firstName} {entry.surname}</td>
-          <td>{entry.email}</td>
-          <td>{entry.contactNumber}</td>
-          <td>{entry.gender}</td>
-          <td>{entry.dob}</td>
-          <td>
-            <span
-              className={`badge ${
-                entry.status === "APPROVED"
-                  ? "bg-success"
-                  : entry.status === "REJECTED"
-                    ? "bg-danger"
-                    : "bg-warning text-dark"
-                }`}
-            >
-              {entry.status}
-            </span>
-          </td>
-          <td>
-            {entry.paymentStatus ? (
-              <span className="badge bg-success">Paid</span>
-            ) : (
-              <span className="badge bg-danger">Unpaid</span>
-            )}
-          </td>
-          <td>
-           <a
-  href={`/application/${entry.id}`}
-  className="btn btn-info btn-sm"
->
-  View Application
-</a>
+          <div className="table-responsive">
+            <table className="table table-bordered table-striped">
+              <thead className="table-dark">
+                <tr>
+                  <th>Select</th>
+                  <th>#</th>
+                  <th onClick={() => handleSort("firstName")} style={{ cursor: "pointer" }}>
+                    Full Name {getSortIcon("firstName")}
+                  </th>
+                  <th onClick={() => handleSort("email")} style={{ cursor: "pointer" }}>
+                    Email {getSortIcon("email")}
+                  </th>
+                  <th onClick={() => handleSort("contactNumber")} style={{ cursor: "pointer" }}>
+                    Mobile {getSortIcon("contactNumber")}
+                  </th>
+                  <th>Gender</th>
+                  <th>DOB</th>
+                  <th onClick={() => handleSort("status")} style={{ cursor: "pointer" }}>
+                    Status {getSortIcon("status")}
+                  </th>
+                  <th>Payment</th>
+                  <th>View Application</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentData.map((entry, index) => (
+                  <tr key={entry.id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(entry.id)}
+                        onChange={() => handleCheckboxChange(entry.id)}
+                      />
+                    </td>
+                    <td>{indexOfFirst + index + 1}</td>
+                    <td>{entry.firstName} {entry.surname}</td>
+                    <td>{entry.email}</td>
+                    <td>{entry.contactNumber}</td>
+                    <td>{entry.gender}</td>
+                    <td>{entry.dob}</td>
+                    <td>
+                      <span
+                        className={`badge ${entry.status === "APPROVED"
+                            ? "bg-success"
+                            : entry.status === "REJECTED"
+                              ? "bg-danger"
+                              : "bg-warning text-dark"
+                          }`}
+                      >
+                        {entry.status}
+                      </span>
+                    </td>
+                    <td>
+                      {entry.paymentStatus ? (
+                        <span className="badge bg-success">Paid</span>
+                      ) : (
+                        <span className="badge bg-danger">Unpaid</span>
+                      )}
+                    </td>
+                    <td>
+                      <a
+                        href={`/application/${entry.id}`}
+                        className="btn btn-info btn-sm"
+                      >
+                        View Application
+                      </a>
 
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
-</div>
-
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
 
 
-                 {/* Pagination controls */}
-      <nav aria-label="Page navigation">
-        <ul className="pagination justify-content-center">
-          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-            <button
-              className="page-link"
-              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-            >
-              Previous
-            </button>
-          </li>
 
-          {[...Array(totalPages)].map((_, i) => (
-            <li
-              key={i}
-              className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
-            >
-              <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
-                {i + 1}
-              </button>
-            </li>
-          ))}
-
-          <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
-            <button
-              className="page-link"
-              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-            >
-              Next
-            </button>
-          </li>
-        </ul>
-      </nav>
-
-      {/* Modal */}
-      {showModal && (
-        <div
-          className="modal fade show"
-          style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
-          tabIndex="-1"
-          role="dialog"
-        >
-          <div className="modal-dialog modal-lg" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Admission Status Charts</h5>
+          {/* Pagination controls */}
+          <nav aria-label="Page navigation">
+            <ul className="pagination justify-content-center">
+              <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
                 <button
-                  type="button"
-                  className="btn-close"
-                  onClick={closeModal}
-                  aria-label="Close"
-                />
-              </div>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col-md-6 mb-1">
-                    <h6 className="text-center">Pie Chart</h6>
-                    <Chart
-                      chartType="PieChart"
-                      data={pieChartData}
-                      options={pieChartOptions}
-                      width={"100%"}
-                      height={"300px"}
+                  className="page-link"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                >
+                  Previous
+                </button>
+              </li>
+
+              {[...Array(totalPages)].map((_, i) => (
+                <li
+                  key={i}
+                  className={`page-item ${currentPage === i + 1 ? "active" : ""}`}
+                >
+                  <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                    {i + 1}
+                  </button>
+                </li>
+              ))}
+
+              <li className={`page-item ${currentPage === totalPages ? "disabled" : ""}`}>
+                <button
+                  className="page-link"
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                >
+                  Next
+                </button>
+              </li>
+            </ul>
+          </nav>
+
+          {/* Modal */}
+          {showModal && (
+            <div
+              className="modal fade show"
+              style={{ display: "block", backgroundColor: "rgba(0,0,0,0.5)" }}
+              tabIndex="-1"
+              role="dialog"
+            >
+              <div className="modal-dialog modal-lg" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Admission Status Charts</h5>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      onClick={closeModal}
+                      aria-label="Close"
                     />
                   </div>
-                  <div className="col-md-6 mb-4 d-flex justify-content-center">
-                    <div style={{ width: "250px", height: "250px" }}>
-                      <h6 className="text-center">Doughnut Chart</h6>
-                      <Doughnut data={doughnutData} options={doughnutOptions} />
+                  <div className="modal-body">
+                    <div className="row">
+                      <div className="col-md-6 mb-1">
+                        <h6 className="text-center">Pie Chart</h6>
+                        <Chart
+                          chartType="PieChart"
+                          data={pieChartData}
+                          options={pieChartOptions}
+                          width={"100%"}
+                          height={"300px"}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-4 d-flex justify-content-center">
+                        <div style={{ width: "250px", height: "250px" }}>
+                          <h6 className="text-center">Doughnut Chart</h6>
+                          <Doughnut data={doughnutData} options={doughnutOptions} />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-md-6 mb-4">
+                        <h6 className="text-center">Bar Chart</h6>
+                        <Chart
+                          chartType="BarChart"
+                          width="100%"
+                          height="300px"
+                          data={barChartData}
+                          options={barChartOptions}
+                        />
+                      </div>
+                      <div className="col-md-6 mb-4">
+                        <h6 className="text-center">Column Chart</h6>
+                        <Chart
+                          chartType="ColumnChart"
+                          width="100%"
+                          height="300px"
+                          data={barChartData}
+                          options={barChartOptions}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                <div className="row">
-                  <div className="col-md-6 mb-4">
-                    <h6 className="text-center">Bar Chart</h6>
-                    <Chart
-                      chartType="BarChart"
-                      width="100%"
-                      height="300px"
-                      data={barChartData}
-                      options={barChartOptions}
-                    />
-                  </div>
-                  <div className="col-md-6 mb-4">
-                    <h6 className="text-center">Column Chart</h6>
-                    <Chart
-                      chartType="ColumnChart"
-                      width="100%"
-                      height="300px"
-                      data={barChartData}
-                      options={barChartOptions}
-                    />
+                  <div className="modal-footer">
+                    <button className="btn btn-secondary" onClick={closeModal}>
+                      Close
+                    </button>
                   </div>
                 </div>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-secondary" onClick={closeModal}>
-                  Close
-                </button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          )}
         </>
-       
-     
-  )}
 
-  {admissionData.length === 0 && <p className="text-muted">No admission data available.</p>}
 
-</div>
+      )}
+
+      {admissionData.length === 0 && <p className="text-muted">No admission data available.</p>}
+
+    </div>
 
   );
 }

@@ -1,11 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
-import { ThemeContext } from '../Context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
- 
+
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
@@ -35,23 +33,23 @@ const Login = () => {
       if (email === 'admin@gmail.com' && password === '111') {
         //alert("Admin logged in");
         sessionStorage.setItem("name", 'admin');
-      sessionStorage.setItem("id", '001');
-      sessionStorage.setItem("email", email);
+        sessionStorage.setItem("id", '001');
+        sessionStorage.setItem("email", email);
 
-       window.location.href = "/adminDash";
-      console.log("sessionstorage",sessionStorage);
-       
+        window.location.href = "/adminDash";
+        console.log("sessionstorage", sessionStorage);
+
         return;
       }
-else{
-       
+      else {
+
         alert("Login failed. Please try again.");
         navigate("/adminlogin");
-       
 
-      // Clear form
-      setFormData({ email: '', password: '' });
-}
+
+        // Clear form
+        setFormData({ email: '', password: '' });
+      }
     } catch (error) {
       alert(`Error: ${error.message}`);
     }
@@ -122,4 +120,4 @@ else{
   );
 };
 
-export default Login;
+export default Login;

@@ -2,25 +2,20 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { useNavigate } from "react-router-dom";
-import AdmissionFormDashboardHeasder from './AdmissionFormDashboardHeader';
 import axios from 'axios';
 import swal from "sweetalert";
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form } from 'react-bootstrap';
 
 function AdmissionFormDashboard() {
     debugger;
-    if (sessionStorage.name == '' || sessionStorage.name === null || sessionStorage.name === undefined) {
+    if (sessionStorage.name === '' || sessionStorage.name === null || sessionStorage.name === undefined) {
         window.location.href = "/registration";
     }
     const navigate = useNavigate();
     const [admissionDetails, setAdmissionDetails] = useState(null);
 
 
-    const handleLogout = () => {
-        sessionStorage.clear();
-        localStorage.removeItem('token');
-        navigate('/registration', { replace: true });
-    };
+
 
     useEffect(() => {
         const email = sessionStorage.getItem("email");
@@ -614,7 +609,7 @@ function AdmissionFormDashboard() {
                                                                             }
                                                                         }
                                                                     }}
-                                                                    // isInvalid={!!errors.contactNumber}
+                                                                // isInvalid={!!errors.contactNumber}
                                                                 />
                                                                 {/* <Form.Control.Feedback type="invalid">
                                                                     {errors.contactNumber}

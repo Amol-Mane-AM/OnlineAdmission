@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import swal from "sweetalert";
-import { useNavigate } from "react-router-dom";
+
 
 
 
@@ -12,7 +12,7 @@ function LoginForm() {
 
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetStep, setResetStep] = useState("EMAIL"); // "EMAIL" → "OTP"
-  const [email, setEmail] = useState("");
+
 
   const [resetForm, setResetForm] = useState({
     email: "",

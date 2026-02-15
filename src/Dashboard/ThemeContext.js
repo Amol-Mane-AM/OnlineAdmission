@@ -1,4 +1,4 @@
-import { children,createContext } from "react";
+import { createContext } from "react";
 import { useState } from "react";
 
 export const ThemeContext = createContext();
@@ -14,10 +14,10 @@ function ThemeProvider(props) {
     const [theme, setTheme] = useState('light');
 
     return (
-        <ThemeContext.Provider value={{theme,setTheme}}>
+        <ThemeContext.Provider value={{ theme, setTheme }}>
             {props.children}
         </ThemeContext.Provider>
     );
 }
 
- export default ThemeProvider;
+export default ThemeProvider;

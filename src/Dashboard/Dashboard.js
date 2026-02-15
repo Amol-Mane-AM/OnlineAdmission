@@ -17,30 +17,30 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 function School() {
-  const { theme } = useContext(ThemeContext);
+  // const { theme } = useContext(ThemeContext);
   const [showTourModal, setShowTourModal] = useState(false);
 
   useEffect(() => {
     AOS.init({ duration: 3000 });
   }, []);
 
- const infoBoxes = [
-  {
-    title: "STUDENT",
-    subtitle: "EVENTS",
-    img: StudentImg, // ✅ Corrected
-  },
-  {
-    title: "CLASSROOM",
-    subtitle: "STORIES",
-    img: ClassroomImg,
-  },
-  {
-    title: "TEACHERS",
-    subtitle: "PROFILE",
-    img: TeacherImg,
-  }
-];
+  const infoBoxes = [
+    {
+      title: "STUDENT",
+      subtitle: "EVENTS",
+      img: StudentImg, // ✅ Corrected
+    },
+    {
+      title: "CLASSROOM",
+      subtitle: "STORIES",
+      img: ClassroomImg,
+    },
+    {
+      title: "TEACHERS",
+      subtitle: "PROFILE",
+      img: TeacherImg,
+    }
+  ];
 
 
   return (
@@ -48,7 +48,7 @@ function School() {
       {/* Hero Section */}
       <section
         className="hero-section container-fluid py-5 text-light"
-       
+
       >
         <div className="container text-center py-5">
           <h5 className="text-uppercase mb-2 fw-bold">Welcome to School of Pune</h5>
@@ -69,32 +69,32 @@ function School() {
 
         {/* Info Boxes */}
         <div className="container d-flex justify-content-center flex-wrap gap-4 mt-5">
-  {infoBoxes.map((item, idx) => (
-    <div
-      key={idx}
-      className="info-card position-relative rounded overflow-hidden shadow-lg bg-white card-3d"
-      style={{
-        width: "280px",
-        perspective: "1000px",
-        transition: "transform 0.5s",
-        transformStyle: "preserve-3d"
-      }}
-    >
-      <div className="info-card-inner">
-        <img
-          src={item.img}
-          alt={item.title}
-          className="w-100"
-          style={{ height: "180px", objectFit: "cover" }}
-        />
-        <div className="p-4 text-center">
-          <h5 className="text-primary mb-2">{item.title}</h5>
-          <p className="text-muted">{item.subtitle}</p>
+          {infoBoxes.map((item, idx) => (
+            <div
+              key={idx}
+              className="info-card position-relative rounded overflow-hidden shadow-lg bg-white card-3d"
+              style={{
+                width: "280px",
+                perspective: "1000px",
+                transition: "transform 0.5s",
+                transformStyle: "preserve-3d"
+              }}
+            >
+              <div className="info-card-inner">
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className="w-100"
+                  style={{ height: "180px", objectFit: "cover" }}
+                />
+                <div className="p-4 text-center">
+                  <h5 className="text-primary mb-2">{item.title}</h5>
+                  <p className="text-muted">{item.subtitle}</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      </div>
-    </div>
-  ))}
-</div>
 
       </section>
 
